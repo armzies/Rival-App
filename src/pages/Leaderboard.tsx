@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Trophy, Medal, User as UserIcon, Calendar, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { db } from '../firebase';
+import { db, handleFirestoreError, OperationType } from '../firebase';
 import { collection, getDocs, query, orderBy, where, Timestamp } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
@@ -41,15 +41,17 @@ export default function Leaderboard() {
       setLoading(true);
       try {
         const usersQuery = query(collection(db, 'users'));
-        const usersSnapshot = await getDocs(usersQuery);
+        const usersSnapshot = await getDocs(usersQuery).catch(err => handleFirestoreError(err, OperationType.GET, 'users'));
         
         const usersMap = new Map<string, any>();
-        usersSnapshot.forEach(doc => {
-          const data = doc.data();
-          if (!data.isGuest) {
-            usersMap.set(data.uid, data);
-          }
-        });
+        if (usersSnapshot) {
+          usersSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (!data.isGuest) {
+              usersMap.set(data.uid, data);
+            }
+          });
+        }
 
         let playersData: Player[] = [];
 
@@ -90,32 +92,34 @@ export default function Leaderboard() {
             where('status', '==', 'completed')
           );
           
-          const matchesSnapshot = await getDocs(matchesQuery);
+          const matchesSnapshot = await getDocs(matchesQuery).catch(err => handleFirestoreError(err, OperationType.GET, 'matches'));
           
           const statsMap = new Map<string, { wins: number; losses: number; matchesPlayed: number }>();
           
-          matchesSnapshot.forEach(doc => {
-            const match = doc.data();
-            const team1 = match.team1 || [];
-            const team2 = match.team2 || [];
-            const winner = match.winner;
-            
-            team1.forEach((uid: string) => {
-              if (!statsMap.has(uid)) statsMap.set(uid, { wins: 0, losses: 0, matchesPlayed: 0 });
-              const stats = statsMap.get(uid)!;
-              stats.matchesPlayed++;
-              if (winner === 1) stats.wins++;
-              else stats.losses++;
+          if (matchesSnapshot) {
+            matchesSnapshot.forEach(doc => {
+              const match = doc.data();
+              const team1 = match.team1 || [];
+              const team2 = match.team2 || [];
+              const winner = match.winner;
+              
+              team1.forEach((uid: string) => {
+                if (!statsMap.has(uid)) statsMap.set(uid, { wins: 0, losses: 0, matchesPlayed: 0 });
+                const stats = statsMap.get(uid)!;
+                stats.matchesPlayed++;
+                if (winner === 1) stats.wins++;
+                else stats.losses++;
+              });
+              
+              team2.forEach((uid: string) => {
+                if (!statsMap.has(uid)) statsMap.set(uid, { wins: 0, losses: 0, matchesPlayed: 0 });
+                const stats = statsMap.get(uid)!;
+                stats.matchesPlayed++;
+                if (winner === 2) stats.wins++;
+                else stats.losses++;
+              });
             });
-            
-            team2.forEach((uid: string) => {
-              if (!statsMap.has(uid)) statsMap.set(uid, { wins: 0, losses: 0, matchesPlayed: 0 });
-              const stats = statsMap.get(uid)!;
-              stats.matchesPlayed++;
-              if (winner === 2) stats.wins++;
-              else stats.losses++;
-            });
-          });
+          }
 
           statsMap.forEach((stats, uid) => {
             const userData = usersMap.get(uid);

@@ -10,6 +10,7 @@ import SessionDetail from './pages/SessionDetail';
 import Settings from './pages/Settings';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Toaster } from 'sonner';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -31,23 +32,25 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Toaster position="top-center" expand={false} richColors />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
-            <Route index element={<Navigate to="/sessions" replace />} />
-            <Route path="sessions" element={<Sessions />} />
-            <Route path="sessions/new" element={<CreateSession />} />
-            <Route path="sessions/:id" element={<SessionDetail />} />
-            <Route path="leaderboard" element={<Leaderboard />} />
-            <Route path="profile/:id" element={<Profile />} />
-            <Route path="settings" element={<Settings />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Toaster position="top-center" expand={false} richColors />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
+              <Route index element={<Navigate to="/sessions" replace />} />
+              <Route path="sessions" element={<Sessions />} />
+              <Route path="sessions/new" element={<CreateSession />} />
+              <Route path="sessions/:id" element={<SessionDetail />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="profile/:id" element={<Profile />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

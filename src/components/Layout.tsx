@@ -16,40 +16,40 @@ export default function Layout() {
   const profilePhoto = userData?.photoURL || user?.photoURL;
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950">
-      {/* Top Header (Minimal) */}
-      <header className="sticky top-0 z-50 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/50">
-        <div className="max-w-md mx-auto px-4">
-          <div className="flex items-center justify-between h-12">
-            <div className="flex items-center gap-1.5">
-              <div className="bg-primary/10 p-1 rounded-lg">
-                <Swords className="w-4 h-4 text-primary" />
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Top Header */}
+      <header className="sticky top-0 z-50 bg-surface border-b border-line">
+        <div className="max-w-md mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <div className="bg-primary/10 p-2 rounded-sm">
+                <Swords className="w-5 h-5 text-primary" />
               </div>
-              <span className="font-bold text-base tracking-tight">Rival</span>
+              <span className="font-mono font-bold text-xl tracking-tighter text-white uppercase">Rival</span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition-colors"
+                className="flex items-center justify-center w-9 h-9 rounded-sm bg-surface border border-line text-zinc-400 hover:text-primary transition-all active:scale-90"
               >
-                <span className="text-[10px] font-black">{i18n.language === 'th' ? 'EN' : 'TH'}</span>
+                <span className="text-[10px] font-mono font-bold">{i18n.language === 'th' ? 'EN' : 'TH'}</span>
               </button>
               <Link
                 to="/settings"
-                className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all ${
-                  location.pathname === '/settings' ? 'border-primary' : 'border-zinc-800 hover:border-zinc-600'
+                className={`flex items-center justify-center w-10 h-10 rounded-sm border transition-all active:scale-90 ${
+                  location.pathname === '/settings' ? 'border-primary' : 'border-line bg-surface'
                 }`}
               >
                 {profilePhoto ? (
                   <img 
                     src={profilePhoto} 
                     alt="Profile" 
-                    className="w-full h-full rounded-full object-cover"
+                    className="w-full h-full rounded-sm object-cover"
                     referrerPolicy="no-referrer" 
                   />
                 ) : (
-                  <User className="w-4 h-4 text-zinc-400" />
+                  <User className="w-5 h-5 text-zinc-400" />
                 )}
               </Link>
             </div>
@@ -58,47 +58,41 @@ export default function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col max-w-md mx-auto w-full pb-16">
+      <main className="flex-1 flex flex-col max-w-md mx-auto w-full pb-24">
         <Outlet />
       </main>
 
       {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-800/50 pb-[env(safe-area-inset-bottom)]">
-        <div className="max-w-md mx-auto px-8 py-2 flex justify-between items-center">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-line">
+        <div className="max-w-md mx-auto px-8 py-3 flex justify-between items-center">
           <Link
             to="/sessions"
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-              location.pathname === '/sessions' ? 'text-primary scale-105' : 'text-zinc-500 hover:text-zinc-300'
+            className={`flex flex-col items-center gap-1 p-2 transition-all active:scale-90 ${
+              location.pathname === '/sessions' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            <Calendar className="w-5 h-5" />
+            <Calendar className="w-6 h-6" />
+            <span className="text-[8px] font-mono uppercase tracking-widest">Sessions</span>
           </Link>
 
           <Link
             to="/leaderboard"
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-              location.pathname === '/leaderboard' ? 'text-primary scale-105' : 'text-zinc-500 hover:text-zinc-300'
+            className={`flex flex-col items-center gap-1 p-2 transition-all active:scale-90 ${
+              location.pathname === '/leaderboard' ? 'text-primary' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            <Trophy className="w-5 h-5" />
+            <Trophy className="w-6 h-6" />
+            <span className="text-[8px] font-mono uppercase tracking-widest">Rank</span>
           </Link>
 
           <Link
             to={`/profile/${user?.uid}`}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-              location.pathname.startsWith('/profile') ? 'text-primary scale-105' : 'text-zinc-500 hover:text-zinc-300'
+            className={`flex flex-col items-center gap-1 p-2 transition-all active:scale-90 ${
+              location.pathname.startsWith('/profile') ? 'text-primary' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            {profilePhoto ? (
-              <img 
-                src={profilePhoto} 
-                alt="Profile" 
-                className={`w-6 h-6 rounded-full border-2 ${location.pathname.startsWith('/profile') ? 'border-primary' : 'border-transparent'}`}
-                referrerPolicy="no-referrer" 
-              />
-            ) : (
-              <User className="w-5 h-5" />
-            )}
+            <User className="w-6 h-6" />
+            <span className="text-[8px] font-mono uppercase tracking-widest">Profile</span>
           </Link>
         </div>
       </nav>

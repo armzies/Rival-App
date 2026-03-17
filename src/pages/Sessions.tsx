@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Calendar, Plus, Users, MapPin, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase';
+import { db, handleFirestoreError, OperationType } from '../firebase';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -36,15 +36,17 @@ export default function Sessions() {
         // For simplicity in this prototype, we'll fetch all active/waiting sessions
         // and sort them client-side to show relevant ones first.
         const q = query(collection(db, 'sessions'), orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(q).catch(err => handleFirestoreError(err, OperationType.GET, 'sessions'));
         
         const sessionsData: Session[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as Session;
-          if (data.status !== 'completed') {
-            sessionsData.push({ id: doc.id, ...data });
-          }
-        });
+        if (querySnapshot) {
+          querySnapshot.forEach((doc) => {
+            const data = doc.data() as Session;
+            if (data.status !== 'completed') {
+              sessionsData.push({ id: doc.id, ...data });
+            }
+          });
+        }
         
         setSessions(sessionsData);
       } catch (error) {

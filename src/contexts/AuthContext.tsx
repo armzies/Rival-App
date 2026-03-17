@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp, onSnapshot, updateDoc } from 'firebase/firestore';
-import { auth, db, googleProvider } from '../firebase';
+import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../firebase';
 import { toast } from 'sonner';
 
 interface UserData {
@@ -45,19 +45,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const userRef = doc(db, 'users', currentUser.uid);
         
         // Ensure document exists
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            uid: currentUser.uid,
-            email: currentUser.email,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
-            elo: 1200,
-            matchesPlayed: 0,
-            wins: 0,
-            losses: 0,
-            createdAt: serverTimestamp()
-          });
+        try {
+          const userSnap = await getDoc(userRef);
+          if (!userSnap.exists()) {
+            await setDoc(userRef, {
+              uid: currentUser.uid,
+              email: currentUser.email,
+              displayName: currentUser.displayName,
+              photoURL: currentUser.photoURL,
+              elo: 1200,
+              matchesPlayed: 0,
+              wins: 0,
+              losses: 0,
+              createdAt: serverTimestamp()
+            });
+          }
+        } catch (error) {
+          handleFirestoreError(error, OperationType.WRITE, `users/${currentUser.uid}`);
         }
 
         // Listen to real-time updates
@@ -65,6 +69,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (doc.exists()) {
             setUserData(doc.data() as UserData);
           }
+        }, (error) => {
+          handleFirestoreError(error, OperationType.GET, `users/${currentUser.uid}`);
         });
       } else {
         setUserData(null);

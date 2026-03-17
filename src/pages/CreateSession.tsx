@@ -63,36 +63,38 @@ export default function CreateSession() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-6 w-full pb-24">
+    <div className="max-w-md mx-auto px-6 py-8 w-full pb-32">
       <button 
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-zinc-400 hover:text-white mb-4 transition-colors text-sm"
+        className="flex items-center gap-2 text-zinc-800 hover:text-zinc-900 mb-8 transition-all active:scale-95 group"
       >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Back</span>
+        <div className="p-2 rounded-xl bg-zinc-100 group-hover:bg-zinc-200 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+        </div>
+        <span className="text-sm font-black uppercase tracking-widest">Back</span>
       </button>
 
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Create Session</h1>
-        <p className="text-zinc-500 text-xs mt-0.5">Set up a new badminton group</p>
+      <div className="mb-10">
+        <h1 className="text-4xl font-black text-zinc-900 tracking-tighter">Create Session</h1>
+        <p className="text-zinc-800 font-bold text-sm mt-2">Set up a new badminton group</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="bg-surface border border-zinc-800 rounded-3xl p-5 space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="glass-card rounded-[2.5rem] p-8 space-y-6 shadow-2xl soft-glow">
           
           {/* Name (Mandatory) */}
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Session Name <span className="text-red-500">*</span></label>
+            <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Session Name <span className="text-primary">*</span></label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Type className="h-4 w-4 text-zinc-500" />
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Type className="h-5 w-5 text-zinc-800" />
               </div>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white placeholder-zinc-600"
+                className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900 placeholder-zinc-500"
                 placeholder="e.g. Sunday Morning Smash"
               />
             </div>
@@ -100,16 +102,16 @@ export default function CreateSession() {
 
           {/* Location */}
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Location <span className="text-zinc-700">(Optional)</span></label>
+            <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Location <span className="text-zinc-600">(Optional)</span></label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <MapPin className="h-4 w-4 text-zinc-500" />
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <MapPin className="h-5 w-5 text-zinc-800" />
               </div>
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white placeholder-zinc-600"
+                className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900 placeholder-zinc-500"
                 placeholder="e.g. Central Badminton Court"
               />
             </div>
@@ -117,59 +119,59 @@ export default function CreateSession() {
 
           {/* Date */}
           <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Date <span className="text-zinc-700">(Optional)</span></label>
+            <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Date <span className="text-zinc-600">(Optional)</span></label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <CalendarIcon className="h-4 w-4 text-zinc-500" />
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <CalendarIcon className="h-5 w-5 text-zinc-800" />
               </div>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white"
+                className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900"
               />
             </div>
           </div>
 
           {/* Time Range */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Start Time</label>
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Start Time</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Clock className="h-4 w-4 text-zinc-500" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Clock className="h-5 w-5 text-zinc-800" />
                 </div>
                 <input
                   type="time"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white"
+                  className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">End Time</label>
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">End Time</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Clock className="h-4 w-4 text-zinc-500" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Clock className="h-5 w-5 text-zinc-800" />
                 </div>
                 <input
                   type="time"
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white"
+                  className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900"
                 />
               </div>
             </div>
           </div>
 
           {/* Capacity */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Max Players</label>
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Max Players</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Users className="h-4 w-4 text-zinc-500" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Users className="h-5 w-5 text-zinc-800" />
                 </div>
                 <input
                   type="number"
@@ -177,15 +179,15 @@ export default function CreateSession() {
                   max="100"
                   value={maxPlayers}
                   onChange={(e) => setMaxPlayers(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white"
+                  className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1.5 ml-1">Courts</label>
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-800 mb-3 ml-1">Courts</label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <MapPin className="h-4 w-4 text-zinc-500" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <MapPin className="h-5 w-5 text-zinc-800" />
                 </div>
                 <input
                   type="number"
@@ -193,7 +195,7 @@ export default function CreateSession() {
                   max="20"
                   value={courts}
                   onChange={(e) => setCourts(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-white"
+                  className="block w-full pl-12 pr-4 py-4 bg-zinc-50 border-2 border-zinc-100 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-zinc-900"
                 />
               </div>
             </div>
@@ -202,14 +204,14 @@ export default function CreateSession() {
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-lg shadow-primary/20 text-sm font-bold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-zinc-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center py-5 px-6 rounded-[2rem] shadow-2xl shadow-primary/30 text-sm font-black uppercase tracking-[0.2em] text-white bg-primary hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" />
           ) : (
             'Create Session'
           )}

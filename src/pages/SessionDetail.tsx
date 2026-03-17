@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase';
+import { db, handleFirestoreError, OperationType } from '../firebase';
 import { toast } from 'sonner';
 import { doc, getDoc, updateDoc, onSnapshot, collection, query, where, getDocs, addDoc, serverTimestamp, runTransaction, setDoc, deleteDoc } from 'firebase/firestore';
 import { MapPin, Clock, Users, Share2, Play, Shuffle, Check, X, UserPlus, Loader2, User, Trophy, Trash2, MoreVertical, Settings, AlertCircle, LayoutGrid, History, Calendar } from 'lucide-react';
@@ -94,6 +94,8 @@ export default function SessionDetail() {
         navigate('/sessions');
       }
       setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, `sessions/${id}`);
     });
 
     // Listen to matches in this session
@@ -105,9 +107,15 @@ export default function SessionDetail() {
         matchData.push({ id: doc.id, ...data });
       });
       
-      // Sort by createdAt desc
-      matchData.sort((a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis());
+      // Sort by createdAt desc, handle nulls
+      matchData.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis() || 0;
+        const timeB = b.createdAt?.toMillis() || 0;
+        return timeB - timeA;
+      });
       setMatches(matchData);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, 'matches');
     });
 
     return () => {
@@ -172,8 +180,7 @@ export default function SessionDetail() {
       setShowEditModal(false);
       toast.success("Session updated successfully!");
     } catch (error) {
-      console.error("Error updating session:", error);
-      toast.error("Failed to update session.");
+      handleFirestoreError(error, OperationType.UPDATE, `sessions/${session.id}`);
     } finally {
       setUpdating(false);
     }
@@ -204,7 +211,7 @@ export default function SessionDetail() {
         players: [...session.players, user.uid]
       });
     } catch (error) {
-      console.error("Error joining session:", error);
+      handleFirestoreError(error, OperationType.UPDATE, `sessions/${session.id}`);
     }
   };
 
@@ -216,7 +223,7 @@ export default function SessionDetail() {
         players: newPlayers
       });
     } catch (error) {
-      console.error("Error removing player:", error);
+      handleFirestoreError(error, OperationType.UPDATE, `sessions/${session.id}`);
     }
   };
 
@@ -256,7 +263,7 @@ export default function SessionDetail() {
       setGuestNames('');
       setShowAddGuest(false);
     } catch (error) {
-      console.error("Error adding guests:", error);
+      handleFirestoreError(error, OperationType.WRITE, 'users/guests');
     } finally {
       setAddingGuest(false);
     }
@@ -280,7 +287,7 @@ export default function SessionDetail() {
       });
       setShowStartConfirm(false);
     } catch (error) {
-      console.error("Error starting session:", error);
+      handleFirestoreError(error, OperationType.UPDATE, `sessions/${session.id}`);
     }
   };
 
@@ -338,7 +345,7 @@ export default function SessionDetail() {
       });
       
     } catch (error) {
-      console.error("Error ending session:", error);
+      handleFirestoreError(error, OperationType.UPDATE, `sessions/${session.id}`);
     }
   };
 
@@ -367,8 +374,7 @@ export default function SessionDetail() {
       setSwappingPlayer(null);
       toast.success("Player swapped successfully!");
     } catch (error) {
-      console.error("Error swapping player:", error);
-      toast.error("Failed to swap player.");
+      handleFirestoreError(error, OperationType.UPDATE, `matches/${swappingPlayer.matchId}`);
     }
   };
 
@@ -473,8 +479,7 @@ export default function SessionDetail() {
       });
       
     } catch (error) {
-      console.error("Error shuffling match:", error);
-      toast.error("Failed to shuffle match.");
+      handleFirestoreError(error, OperationType.CREATE, 'matches');
     } finally {
       setShuffling(false);
     }
@@ -540,7 +545,7 @@ export default function SessionDetail() {
       await Promise.all(updatePromises);
       
     } catch (error) {
-      console.error("Error resolving match:", error);
+      handleFirestoreError(error, OperationType.UPDATE, 'multiple-docs');
     }
   };
 
