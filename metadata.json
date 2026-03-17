@@ -1,0 +1,5 @@
+{
+  "name": "Badz",
+  "description": "A competitive stat-tracking application with leaderboards, Elo ratings, and match history.",
+  "requestFramePermissions": []
+}

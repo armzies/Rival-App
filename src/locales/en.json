@@ -1,0 +1,99 @@
+{
+  "nav": {
+    "leaderboard": "Leaderboard",
+    "logMatch": "Log Match",
+    "login": "Log in",
+    "signup": "Sign up"
+  },
+  "home": {
+    "beta": "Rival Beta is Live",
+    "title1": "Elevate Your",
+    "title2": "Game",
+    "subtitle": "The ultimate companion for competitive circles. Track stats, dominate leaderboards, and share your glory.",
+    "ctaPrimary": "Get Started Now",
+    "ctaSecondary": "View Leaderboards",
+    "featuresTitle": "Unmatched Tracking",
+    "featuresSubtitle": "Multiple ways to track performance, ensuring every victory counts toward your legacy.",
+    "features": {
+      "player": {
+        "title": "Player Leaderboard",
+        "desc": "Rank individual performance across your group. See who has the highest win rate, most wins, and consistent participation."
+      },
+      "team": {
+        "title": "Team Leaderboard",
+        "desc": "Track how well specific combinations perform together. Discover the most dominant duos and legendary teammates."
+      },
+      "form": {
+        "title": "Dynamic Form Tracking",
+        "desc": "Monitor your recent performance streaks. Are you on fire or in a slump? Our form tracker tells the story."
+      },
+      "log": {
+        "title": "Instant Logging",
+        "desc": "Record matches in seconds with our optimized interface. Spend less time logging and more time playing."
+      },
+      "goals": {
+        "title": "Personal Goals",
+        "desc": "Set milestones and track collections over time. Push yourself to reach the next Elo tier."
+      },
+      "elo": {
+        "title": "Elo Ratings",
+        "desc": "Fair and balanced ranking system. Gain more points for defeating higher-ranked opponents."
+      }
+    },
+    "ctaBottom": {
+      "title": "Start Your Legacy Today",
+      "desc": "Available now. No credit card required. Built for the love of the game, by enthusiasts for enthusiasts.",
+      "button": "Join Rival Now"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Rival Clone. Built for enthusiasts."
+  },
+  "logMatch": {
+    "title": "Log a Match",
+    "subtitle": "Record your latest victory. Select players, set the score, and update the rankings.",
+    "team1": "Team 1",
+    "team2": "Team 2",
+    "score": "Score",
+    "addPlayer": "Add Player",
+    "selectPlayer": "Select Player...",
+    "submit": "Submit Match",
+    "submitting": "Submitting...",
+    "success": "Match logged successfully!",
+    "error": "Failed to log match.",
+    "validation": {
+      "needPlayers": "Both teams need at least one player.",
+      "needScores": "Please enter scores for both teams.",
+      "noTie": "Matches cannot end in a tie.",
+      "duplicatePlayer": "A player cannot be on both teams."
+    }
+  },
+  "leaderboard": {
+    "title": "Global Rankings",
+    "subtitle": "The best of the best. Climb the ranks and secure your legacy.",
+    "rank": "Rank",
+    "player": "Player",
+    "rating": "Rating",
+    "winRate": "Win Rate",
+    "matches": "Matches",
+    "w": "W",
+    "l": "L",
+    "unranked": "Unranked",
+    "noPlayers": "No players found. Be the first to log a match!"
+  },
+  "profile": {
+    "notFound": "Player not found",
+    "stats": "Statistics",
+    "rating": "Elo Rating",
+    "winRate": "Win Rate",
+    "matches": "Matches Played",
+    "wins": "Wins",
+    "losses": "Losses",
+    "recentMatches": "Recent Matches",
+    "noMatches": "No matches played yet.",
+    "victory": "Victory",
+    "defeat": "Defeat",
+    "vs": "vs",
+    "date": "Date"
+  }
+}

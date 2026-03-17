@@ -1,0 +1,161 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a player in the system.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID or generated Guest UID"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "photoURL": {
+          "type": "string"
+        },
+        "elo": {
+          "type": "number",
+          "description": "Current Elo rating"
+        },
+        "matchesPlayed": {
+          "type": "number"
+        },
+        "wins": {
+          "type": "number"
+        },
+        "losses": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isGuest": {
+          "type": "boolean",
+          "description": "True if this is a virtual user created by a host"
+        },
+        "hostId": {
+          "type": "string",
+          "description": "UID of the host who created this guest user"
+        }
+      },
+      "required": ["uid", "displayName", "elo", "matchesPlayed", "wins", "losses", "createdAt"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "Represents a game.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "team1": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of user UIDs"
+        },
+        "team2": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of user UIDs"
+        },
+        "team1Score": {
+          "type": "number"
+        },
+        "team2Score": {
+          "type": "number"
+        },
+        "winner": {
+          "type": "number",
+          "description": "1 for team1, 2 for team2, 0 for pending"
+        },
+        "loggedBy": {
+          "type": "string",
+          "description": "UID of the user who logged the match"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "ID of the session this match belongs to"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "completed"],
+          "description": "Status of the match"
+        }
+      },
+      "required": ["team1", "team2", "loggedBy", "createdAt"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "Represents a badminton session.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "hostId": {
+          "type": "string",
+          "description": "UID of the user who created the session"
+        },
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "maxPlayers": {
+          "type": "number"
+        },
+        "courts": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "active", "completed"]
+        },
+        "players": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of user UIDs who joined"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "hostId", "name", "status", "players", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles and their aggregate stats (Elo, wins, losses)."
+    },
+    "matches/{matchId}": {
+      "schema": { "$ref": "#/entities/Match" },
+      "description": "Stores individual match records."
+    },
+    "sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/Session" },
+      "description": "Stores badminton sessions."
+    }
+  }
+}
